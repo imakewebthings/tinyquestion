@@ -1,0 +1,14 @@
+{
+  "launchers": {
+    "mocha": {
+      "command": "mocha test/*.js"
+    }
+  },
+
+  "launch_in_dev": [ "mocha" ],
+  "launch_in_ci": [ "mocha" ],
+  "src_files": [
+    "app/**/*.js",
+    "test/**/*.js"
+  ]
+}

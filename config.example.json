@@ -1,0 +1,8 @@
+{
+  "PORT": 3000,
+  "COOKIE_SECRET": "Change Me",
+  "COOKIE_KEY": "tinyq",
+  "TWITTER_CONSUMER_KEY": "Change Me",
+  "TWITTER_CONSUMER_SECRET": "Change Me",
+  "TWITTER_CALLBACK_URL": "http://127.0.0.1:3000/auth/twitter/callback"
+}
