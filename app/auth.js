@@ -31,10 +31,20 @@ module.exports = function(app, config, redis) {
   app.use(passport.session());
 
   app.get('/auth/twitter', passport.authenticate('twitter'));
+
   app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-    successRedirect: '/',
     failureRedirect: '/'
-  }));
+  }), function(req, res) {
+    if (req.session.redirectPath) {
+      var path = req.session.redirectPath;
+      req.session.redirectPath = null;
+      res.redirect(path);
+    }
+    else {
+      res.redirect('/');
+    }
+  });
+
   app.get('/auth/logout', function(req, res) {
     req.logout();
     res.redirect('/');

@@ -1,0 +1,8 @@
+extend layout
+
+block content
+  form(action='.', method='post')
+    label(for='question_id') Ask a Question
+    textarea#question_id(name='question')
+    input(type='submit', value='Ask')
+  ul.questions

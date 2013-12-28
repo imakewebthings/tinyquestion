@@ -34,6 +34,7 @@
   "devDependencies": {
     "testem": "~0.6.2",
     "mocha": "~1.16.1",
-    "chai": "~1.8.1"
+    "chai": "~1.8.1",
+    "lodash": "~2.4.1"
   }
 }
