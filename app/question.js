@@ -42,16 +42,27 @@ module.exports = {
     callback(null, questions[id]);
   },
 
-  destroy: function(id, callback) {
-    var question = questions[id];
-
+  read: function(id, callback) {
     if (!id) {
       return callback(new Error('Id is required'));
     }
+    callback(null, questions[id]);
+  },
+
+  destroy: function(id, callback) {
+    if (!id) {
+      return callback(new Error('Id is required'));
+    }
+    var question = questions[id];
     if (!question) {
       return callback(new Error('Question with id ' + id + ' does not exist'));
     }
 
+    delete questions[id];
     callback(null, question);
+  },
+
+  destroyAll: function(callback) {
+    questions = {};
   }
 };

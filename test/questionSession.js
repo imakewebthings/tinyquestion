@@ -45,6 +45,25 @@ describe('Question Session', function() {
   });
 
   describe('#questions', function() {
-    it('supplies an array of Question objects');
+    beforeEach(function(done) {
+      QuestionSession.create(function(err, sessionId) {
+        this.sessionId = sessionId;
+        done();
+      }.bind(this));
+    });
+
+    it('requires an id parameter', function(done) {
+      QuestionSession.questions(null, function(err, session) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      });
+    });
+
+    xit('supplies an array of Question objects', function(done) {
+      QuestionSession.questions(function(err, questions) {
+        expect(questions).to.be.an.array;
+        done();
+      });
+    });
   });
 });

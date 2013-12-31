@@ -28,5 +28,12 @@ module.exports = {
       return callback(new Error('Question session id required'));
     }
     callback(null, questionSessions[id]);
+  },
+
+  questions: function(id, callback) {
+    if (!id) {
+      return callback(new Error('Question session id required'));
+    }
+
   }
 };
