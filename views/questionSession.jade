@@ -1,8 +1,13 @@
 extend layout
 
 block content
-  form(action='.', method='post')
+  form(action='/#{questionSession.id}', method='post')
     label(for='question_id') Ask a Question
     textarea#question_id(name='question')
     input(type='submit', value='Ask')
   ul.questions
+    each question in questions
+      li
+        p= question.text
+        form(action='/questions/#{question.id}', method='post')
+          input(type='submit', value='#{question.votes}', title='Upvote')

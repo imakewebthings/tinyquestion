@@ -1,4 +1,5 @@
 var crypto = require('crypto');
+var _ = require('lodash');
 
 var questions = {};
 
@@ -37,7 +38,8 @@ module.exports = {
       text: properties.text,
       userId: properties.user.id,
       userDisplayName: properties.user.displayName,
-      questionSessionId: properties.questionSessionId
+      questionSessionId: properties.questionSessionId,
+      votes: 0
     };
     callback(null, questions[id]);
   },
@@ -46,7 +48,14 @@ module.exports = {
     if (!id) {
       return callback(new Error('Id is required'));
     }
-    callback(null, questions[id]);
+    if (Array.isArray(id)) {
+      callback(null, _.compact(id.map(function(i) {
+        return questions[i];
+      })));
+    }
+    else {
+      callback(null, questions[id]);
+    }
   },
 
   destroy: function(id, callback) {
@@ -64,5 +73,16 @@ module.exports = {
 
   destroyAll: function(callback) {
     questions = {};
+  },
+
+  upvote: function(id, callback) {
+    if (!id) {
+      return callback(new Error('Id is required'));
+    }
+    if(!questions[id]) {
+      return callback(new Error('Question with id' + id + ' does not exist'));
+    }
+    questions[id].votes++;
+    callback(null, questions[id]);
   }
 };

@@ -1,18 +1,6 @@
 var Question = require('../app/question');
 var expect = require('chai').expect;
-var _ = require('lodash');
-
-var mockQuestion = function(properties) {
-  var defaults = {
-    user: {
-      id: 'test-user-id',
-      displayName: 'test-user-display-name'
-    },
-    questionSessionId: 'test-session',
-    text: 'test question?'
-  };
-  return _.extend(defaults, properties);
-};
+var mockQuestion = require('./mock/question');
 
 describe('Question', function() {
   afterEach(function() {
@@ -86,8 +74,20 @@ describe('Question', function() {
       beforeEach(function(done) {
         Question.create(mockQuestion(), function(err, question) {
           this.secondQuestion = question;
+          done();
         }.bind(this));
       });
+
+      it('supplies array of questions', function(done) {
+        Question.read([
+          this.question.id,
+          'does-not-exist',
+          this.secondQuestion.id
+        ], function(err, questions) {
+          expect(questions).to.deep.equal([this.question, this.secondQuestion]);
+          done();
+        }.bind(this));
+      })
     });
   });
 
@@ -134,9 +134,33 @@ describe('Question', function() {
     });
   });
 
-  describe('#upvote', function(done) {
-    xit('errors if question does not exist', function(done) {
-      expect('implemented').to.not.exist;
+  describe('#upvote', function() {
+    beforeEach(function(done) {
+      Question.create(mockQuestion(), function(err, question) {
+        this.question = question;
+        done();
+      }.bind(this));
+    });
+
+    it('requires id', function(done) {
+      Question.upvote(null, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      });
+    });
+
+    it('errors if question does not exist', function(done) {
+      Question.upvote('no-exist', function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      });
+    });
+
+    it('supplies upvoted question with updated votes', function(done) {
+      Question.upvote(this.question.id, function(err, question) {
+        expect(question.votes).to.equal(1);
+        done();
+      });
     });
   });
 });
