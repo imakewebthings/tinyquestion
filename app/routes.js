@@ -52,7 +52,8 @@ module.exports = function(app, config) {
     function(req, res, next) {
       return res.render('questionSession', {
         questionSession: req.questionSession,
-        questions: req.questions
+        questions: req.questions,
+        currentUser: req.user
       });
     }
   );
@@ -69,6 +70,17 @@ module.exports = function(app, config) {
   app.post('/questions/:id', loginRequired, function(req, res, next) {
     Question.upvote(req.params.id, function(err, question) {
       res.redirect('/' + question.questionSessionId);
+    });
+  });
+
+  app.del('/questions/:id', loginRequired, function(req, res, next) {
+    Question.read(req.params.id, function(err, question) {
+      if (err || question.userId !== req.user.id) {
+        return next();
+      }
+      Question.destroy(req.params.id, function() {
+        res.redirect('/' + question.questionSessionId);
+      });
     });
   });
 

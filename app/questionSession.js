@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var crypto = require('crypto');
 var async = require('async');
 var Question = require('./question');
@@ -78,7 +79,9 @@ module.exports = {
       return callback(new Error('Question session id required'));
     }
     persistence.readList('questionSession:questions', id, function(err, ids) {
-      Question.read(ids, callback);
+      Question.read(ids, function(err, questions) {
+        callback(err, _.compact(questions));
+      });
     });
   }
 };

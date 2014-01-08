@@ -8,11 +8,15 @@ block content
     input.ask(type='submit', value='Ask')
   ul.questions
     each question in questions
-      li
-        a.user-photo(href='http://twitter.com/#{question.userUsername}')
-          img(src=question.userPhoto, alt=question.userDisplayName,
-          title=question.)
+      li.clearfix
+        a.user-photo(href='http://twitter.com/#{question.userUsername}',
+        target='_blank')
+          img(src=question.userPhoto, alt=question.userDisplayName, title=question.userDisplayName)
         p= question.text
         form(action='/questions/#{question.id}', method='post')
           button.upvote(type='submit', title='Upvote')
             = question.votes + ' votes'
+        if currentUser.id === question.userId
+          form(action='/questions/#{question.id}', method='post')
+            input(type='hidden', name='_method', value='delete')
+            input.delete-question(type='submit', value!='&times;', title='Delete')
