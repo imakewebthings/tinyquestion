@@ -3,8 +3,8 @@ var expect = require('chai').expect;
 var mockQuestion = require('./mock/question');
 
 describe('Question', function() {
-  afterEach(function() {
-    Question.destroyAll();
+  afterEach(function(done) {
+    Question.destroyAll(done);
   });
 
   describe('#create', function() {
@@ -106,9 +106,9 @@ describe('Question', function() {
       });
     });
 
-    it('errors if question does not exist', function(done) {
+    it('supplies undefined if question does not exist', function(done) {
       Question.destroy('does-not-exist', function(err, question) {
-        expect(err).to.be.an.instanceof(Error);
+        expect(question).to.not.exist;
         done();
       })
     });
@@ -131,6 +131,38 @@ describe('Question', function() {
           done();
         });
       });
+    });
+
+    describe('with multiple ids', function() {
+      beforeEach(function(done) {
+        Question.create(mockQuestion(), function(err, question) {
+          this.secondQuestion = question;
+          Question.destroy([
+            this.question.id,
+            this.secondQuestion.id
+          ], function(err, questions) {
+            this.suppliedQuestions = questions;
+            done();
+          }.bind(this));
+        }.bind(this));
+      });
+
+      it('deletes all ids specified', function(done) {
+        Question.read([
+          this.question.id,
+          this.secondQuestion.id
+        ], function(err, questions) {
+          expect(questions).to.be.empty;
+          done();
+        });
+      });
+
+      it('supplies the deleted questions', function() {
+        expect(this.suppliedQuestions).to.deep.equal([
+          this.question,
+          this.secondQuestion
+        ]);
+      })
     });
   });
 

@@ -1,6 +1,10 @@
 extend layout
 
 block content
-  a(href='/auth/logout') Logout
-  form(action='/', method='post')
-    input(type='submit', value='New Question Session')
+  a.logout(href='/auth/logout') Logout
+  ol.howto
+    li Sign In with Twitter
+    li.onstep
+      form(action='/', method='post')
+        input(type='submit', value='Create a Question Session')
+    li Share Session Link with Audience

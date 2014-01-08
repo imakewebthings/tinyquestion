@@ -13,7 +13,7 @@ var loginRequired = function(req, res, next) {
 
 var getQuestionSession = function(req, res, next) {
   QuestionSession.read(req.params.id, function(err, questionSession) {
-    if (err) {
+    if (err || !questionSession) {
       return res.status(404).render('404');
     }
     req.questionSession = questionSession;
@@ -24,7 +24,7 @@ var getQuestionSession = function(req, res, next) {
 var getQuestions = function(req, res, next) {
   QuestionSession.questions(req.params.id, function(err, questions) {
     if (err) {
-      return res.status(404).render('404')
+      return res.status(404).render('404');
     }
     req.questions = questions.sort(function(a, b) {
       return parseInt(b.votes, 10) - parseInt(a.votes, 10);

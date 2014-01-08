@@ -6,7 +6,8 @@
   "scripts": {
     "test": "testem ci",
     "tdd": "testem",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,13 @@
     "testem": "~0.6.2",
     "mocha": "~1.16.1",
     "chai": "~1.8.1",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "gulp": "~3.2.4",
+    "gulp-sass": "~0.2.3",
+    "gulp-jshint": "~1.3.4",
+    "jshint-stylish": "~0.1.5",
+    "gulp-concat": "~2.1.7",
+    "gulp-uglify": "~0.1.0",
+    "gulp-plumber": "~0.4.1"
   }
 }

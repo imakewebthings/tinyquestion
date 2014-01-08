@@ -1,20 +1,20 @@
 var crypto = require('crypto');
 var _ = require('lodash');
+var persistence = require('./persistence')();
 
-var questions = {};
-
-var generateId = function() {
-  try {
-    var id;
-    do {
-      var buf = crypto.randomBytes(12);
-      id = buf.toString('hex');
-    } while(questions[id]);
-    return id;
-  }
-  catch (exception) {
-    console.error('Could not generate random message id');
-  }
+var generateId = function(callback) {
+  crypto.randomBytes(12, function(err, buffer) {
+    if (err) {
+      throw err;
+    }
+    var id = buffer.toString('hex');
+    persistence.readHash('question', id, function(err, question) {
+      if (question) {
+        return generateId(callback);
+      }
+      callback(null, id);
+    });
+  });
 };
 
 module.exports = {
@@ -32,16 +32,16 @@ module.exports = {
       return callback(new Error('Question requires text'));
     }
 
-    var id = generateId();
-    questions[id] = {
-      id: id,
-      text: properties.text,
-      userId: properties.user.id,
-      userDisplayName: properties.user.displayName,
-      questionSessionId: properties.questionSessionId,
-      votes: 0
-    };
-    callback(null, questions[id]);
+    generateId(function(err, id) {
+      persistence.putHash('question', id, {
+        id: id,
+        text: properties.text,
+        userId: properties.user.id,
+        userDisplayName: properties.user.displayName,
+        questionSessionId: properties.questionSessionId,
+        votes: 0
+      }, callback);
+    });
   },
 
   read: function(id, callback) {
@@ -49,40 +49,35 @@ module.exports = {
       return callback(new Error('Id is required'));
     }
     if (Array.isArray(id)) {
-      callback(null, _.compact(id.map(function(i) {
-        return questions[i];
-      })));
+      return persistence.readMultipleHashes('question', id, callback);
     }
-    else {
-      callback(null, questions[id]);
-    }
+    persistence.readHash('question', id, callback);
   },
 
   destroy: function(id, callback) {
     if (!id) {
       return callback(new Error('Id is required'));
     }
-    var question = questions[id];
-    if (!question) {
-      return callback(new Error('Question with id ' + id + ' does not exist'));
+    if (Array.isArray(id)) {
+      return persistence.destroyMultiples('question', id, callback);
     }
-
-    delete questions[id];
-    callback(null, question);
+    persistence.destroy('question', id, callback);
   },
 
   destroyAll: function(callback) {
-    questions = {};
+    persistence.destroyAll('question', callback);
   },
 
   upvote: function(id, callback) {
     if (!id) {
       return callback(new Error('Id is required'));
     }
-    if(!questions[id]) {
-      return callback(new Error('Question with id' + id + ' does not exist'));
-    }
-    questions[id].votes++;
-    callback(null, questions[id]);
+    persistence.readHash('question', id, function(err, question) {
+      if(!question) {
+        return callback(new Error('Question with id' + id + ' does not exist'));
+      }
+      question.votes++;
+      persistence.putHash('question', id, question, callback);
+    });
   }
 };

@@ -2,8 +2,10 @@ var express = require('express');
 var path = require('path');
 var redis = require('redis').createClient();
 var RedisStore = require('connect-redis')(express);
+var persistence = require('./persistence')('redis');
 
 module.exports = function(app, config) {
+  persistence.setClient(redis);
   app.set('views', path.resolve(__dirname, '..', 'views'));
   app.set('view engine', 'jade');
   app.set('view options', { layout: false });

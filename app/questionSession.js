@@ -1,37 +1,50 @@
 var crypto = require('crypto');
+var async = require('async');
 var Question = require('./question');
+var persistence = require('./persistence')();
 
-var questionSessions = {};
-
-var generateId = function() {
-  var id;
-  try {
-    do {
-      var buffer = crypto.randomBytes(2);
-      id = buffer.toString('hex');
-    } while (questionSessions[id])
-    return id;
-  }
-  catch (exception) {
-    console.error('Crypto could not generate random bytes');
-  }
+var generateId = function(callback) {
+  crypto.randomBytes(2, function(err, buffer) {
+    if (err) {
+      throw err;
+    }
+    var id = buffer.toString('hex');
+    persistence.readHash('questionSession', id, function(err, session) {
+      if (session) {
+        return generateId(callback);
+      }
+      callback(null, id);
+    });
+  });
 };
 
 module.exports = {
   create: function(callback) {
-    var id = generateId();
-    questionSessions[id] = {
-      id: id,
-      questionIds: []
-    };
-    callback(null, questionSessions[id]);
+    generateId(function(err, id) {
+      var questionSessionHash = {
+        id: id
+      };
+      async.parallel([
+        function putQuestionSessionHash(cb) {
+          persistence.putHash('questionSession', id, questionSessionHash, cb);
+        },
+        function putQuestionList(cb) {
+          persistence.createEmptyList('questionSession:questions', id, cb);
+        }
+      ], function(err, results) {
+        if (err) {
+          return callback(err);
+        }
+        callback(null, questionSessionHash);
+      });
+    });
   },
 
   read: function(id, callback) {
     if (!id) {
       return callback(new Error('Question session id required'));
     }
-    callback(null, questionSessions[id]);
+    persistence.readHash('questionSession', id, callback);
   },
 
   createQuestion: function(id, question, callback) {
@@ -46,8 +59,17 @@ module.exports = {
       if (err) {
         return callback(err);
       }
-      questionSessions[id].questionIds.push(createdQuestion.id);
-      callback(null, createdQuestion);
+      persistence.listAppend(
+        'questionSession:questions',
+        id,
+        createdQuestion.id,
+        function(err, questionIdList) {
+          if (err) {
+            return callback(err);
+          }
+          callback(null, createdQuestion);
+        }
+      );
     });
   },
 
@@ -55,9 +77,8 @@ module.exports = {
     if (!id) {
       return callback(new Error('Question session id required'));
     }
-    if(!questionSessions[id]) {
-      return callback(new Error('Question session does not exist'));
-    }
-    Question.read(questionSessions[id].questionIds, callback);
+    persistence.readList('questionSession:questions', id, function(err, ids) {
+      Question.read(ids, callback);
+    });
   }
 };

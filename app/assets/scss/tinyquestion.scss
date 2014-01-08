@@ -1,0 +1,155 @@
+@import 'normalize';
+
+
+* {
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
+
+body {
+  font-size:20px;
+}
+
+a {
+  color:black;
+}
+
+label {
+  display:block;
+  background:black;
+  color:white;
+  text-align:center;
+  padding:8px 0;
+  border-radius:10px 10px 0 0;
+  font-size:1.2em;
+}
+
+textarea {
+  display:block;
+  width:100%;
+  border:1px solid black;
+  border-top:0;
+  border-bottom:0;
+  padding:5px;
+}
+
+.ask {
+  display:block;
+  border:0;
+  background:black;
+  color:white;
+  cursor:pointer;
+  width:100%;
+  padding:8px 0;
+  font-size:1.2em;
+  border-radius:0 0 10px 10px;
+}
+
+.page-wrapper {
+  width:100%;
+  max-width:540px;
+  padding:.5em;
+  margin:0 auto;
+  position:relative;
+}
+
+.logout {
+  position:absolute;
+  right:10px;
+  top:1.9em;
+  font-size:.6em;
+}
+
+.questions {
+  list-style:none;
+  padding:0;
+
+  &:empty:before {
+    content:'There are no questions yet.';
+    text-align:center;
+    display:block;
+  }
+
+  li {
+    position:relative;
+    padding:0 0 0 80px;
+    overflow:hidden;
+  }
+
+  p {
+    background:black;
+    color:white;
+    padding:8px 10px;
+    border-radius:10px;
+    margin:0 0 16px 0;
+    position:relative;
+
+    &:before {
+      content:'';
+      width:0;
+      height:0;
+      position:absolute;
+      top:16px;
+      left:-12px;
+      border:6px solid transparent;
+      border-right-color:black;
+    }
+  }
+
+  img {
+    float:left;
+    margin:0 0 36px -80px;
+    border-radius:10px;
+  }
+}
+
+.upvote {
+  position:absolute;
+  z-index:2;
+  top:68px;
+  left:0;
+  font-size:.6em;
+  background:transparent;
+  border:0;
+  text-align:left;
+  padding:2px;
+
+  &:before {
+    content:'\25b2';
+    display:inline-block;
+    margin-right:3px;
+  }
+}
+
+.howto {
+  margin:0;
+
+  li {
+    border:1px solid black;
+    margin-top:8px;
+    padding:8px 10px;
+    border-radius:10px;
+  }
+
+  .onstep {
+    padding:0;
+    border:0;
+
+    a, input {
+      display:block;
+      padding:8px 10px;
+      background:black;
+      text-decoration:none;
+      color:white;
+      border-radius:10px;
+      border:0;
+      width:100%;
+      text-align:left;
+    }
+
+    form {
+      display:inline-block;
+      width:100%;
+    }
+  }
+}

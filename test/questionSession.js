@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var mockQuestion = require('./mock/question');
 var Question = require('../app/question');
 var async = require('async');
+var _ = require('lodash');
 
 describe('Question Session', function() {
   describe('#create', function() {
@@ -87,8 +88,11 @@ describe('Question Session', function() {
       );
     });
 
-    it('adds question id to session question id list', function() {
-      expect(this.session.questionIds).to.contain(this.createdQuestion.id);
+    it('adds question id to session question id list', function(done) {
+      QuestionSession.questions(this.session.id, function(err, questions) {
+        expect(_.pluck(questions, 'id')).to.contain(this.createdQuestion.id);
+        done();
+      }.bind(this));
     });
 
     it('supplies newly created question', function() {
