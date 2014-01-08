@@ -1,6 +1,5 @@
 @import 'normalize';
 
-
 * {
   -moz-box-sizing:border-box;
   box-sizing:border-box;
@@ -95,10 +94,17 @@ textarea {
       border-right-color:black;
     }
   }
+}
+
+.user-photo {
+  display:block;
+  float:left;
+  margin:0 0 36px -80px;
 
   img {
-    float:left;
-    margin:0 0 36px -80px;
+    display:block;
+    width:64px;
+    height:64px;
     border-radius:10px;
   }
 }
