@@ -3,7 +3,7 @@ var sass = require('gulp-sass');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var plumber = require('gulp-plumber')
+var plumber = require('gulp-plumber');
 
 var frontendJS = 'app/assets/js/*.js';
 

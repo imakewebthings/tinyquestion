@@ -9,8 +9,9 @@ block content
   ul.questions
     each question in questions
       li
-        img(src='http://placekitten.com/128/128', alt='', width='64',
-        height='64')
+        a.user-photo(href='http://twitter.com/#{question.userUsername}')
+          img(src=question.userPhoto, alt=question.userDisplayName,
+          title=question.)
         p= question.text
         form(action='/questions/#{question.id}', method='post')
           button.upvote(type='submit', title='Upvote')

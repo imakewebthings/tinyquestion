@@ -10,8 +10,9 @@ module.exports = function(app, config, redis) {
   var verification = function(token, tokenSecret, profile, done) {
     var user = {
       id: profile.id,
+      username: profile.username,
       displayName: profile.displayName,
-      photo: profile.photos[0].value
+      photo: profile.photos[0].value.replace('_normal', '_bigger')
     };
     redis.hmset('user' + profile.id, user);
     done(null, user);

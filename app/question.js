@@ -38,6 +38,8 @@ module.exports = {
         text: properties.text,
         userId: properties.user.id,
         userDisplayName: properties.user.displayName,
+        userUsername: properties.user.username,
+        userPhoto: properties.user.photo,
         questionSessionId: properties.questionSessionId,
         votes: 0
       }, callback);
