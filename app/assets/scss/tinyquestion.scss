@@ -93,6 +93,7 @@ textarea {
     border-radius:10px;
     margin:0 0 16px 0;
     position:relative;
+    word-wrap:break-word;
 
     &:before {
       content:'';

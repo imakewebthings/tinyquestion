@@ -4,8 +4,17 @@ var redis = require('redis').createClient();
 var RedisStore = require('connect-redis')(express);
 var persistence = require('./persistence')('redis');
 
+var setupSockets = function(app) {
+  app.io.on('connection', function(socket) {
+    socket.on('joinRoom', function(room) {
+      socket.join(room);
+    });
+  });
+};
+
 module.exports = function(app, config) {
   persistence.setClient(redis);
+  setupSockets(app);
   app.set('views', path.resolve(__dirname, '..', 'views'));
   app.set('view engine', 'jade');
   app.set('view options', { layout: false });

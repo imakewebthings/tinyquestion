@@ -1,22 +1,39 @@
 extend layout
 
+block head
+  meta(name='socket-room', content=questionSession.id)
+  meta(name='user-id', content=currentUser.id)
+
 block content
   a.logout(href='/auth/logout') Logout
-  form(action='/#{questionSession.id}', method='post')
+  form.ajax-submit(action='/#{questionSession.id}', method='post')
     label(for='question_id') Your Question
     textarea#question_id(name='question', rows=5)
     input.ask(type='submit', value='Ask')
   ul.questions
     each question in questions
-      li.clearfix
+      li.clearfix(data-questionid=question.id)
         a.user-photo(href='http://twitter.com/#{question.userUsername}',
         target='_blank')
           img(src=question.userPhoto, alt=question.userDisplayName, title=question.userDisplayName)
         p= question.text
-        form(action='/questions/#{question.id}', method='post')
-          button.upvote(type='submit', title='Upvote')
+        form.ajax-submit(action='/questions/#{question.id}', method='post')
+          button.upvote(type='submit', title='Upvote',
+          data-votes=question.votes)
             = question.votes + ' votes'
         if currentUser.id === question.userId
-          form(action='/questions/#{question.id}', method='post')
+          form.ajax-submit(action='/questions/#{question.id}', method='post')
             input(type='hidden', name='_method', value='delete')
             input.delete-question(type='submit', value!='&times;', title='Delete')
+  
+
+  script#template-question(type='x-template').
+    <li class="clearfix">
+      <a class="user-photo" target="_blank"><img /></a>
+      <p></p>
+      <form method="post">
+        <button class="upvote" type="submit" title="Upvote" data-votes="0">0 votes</button>
+      </form>
+    </li>
+
+  script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')

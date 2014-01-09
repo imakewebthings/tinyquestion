@@ -63,13 +63,16 @@ module.exports = function(app, config) {
       text: req.body.question,
       user: req.user
     }, function(err, question) {
+      app.io.sockets.in(req.params.id).emit('createdQuestion', question);
       res.redirect('/' + req.params.id);
     });
   });
 
   app.post('/questions/:id', loginRequired, function(req, res, next) {
     Question.upvote(req.params.id, function(err, question) {
-      res.redirect('/' + question.questionSessionId);
+      var sessionId = question.questionSessionId;
+      app.io.sockets.in(sessionId).emit('upvoted', question.id);
+      res.redirect('/' + sessionId);
     });
   });
 
@@ -79,7 +82,9 @@ module.exports = function(app, config) {
         return next();
       }
       Question.destroy(req.params.id, function() {
-        res.redirect('/' + question.questionSessionId);
+        var sessionId = question.questionSessionId;
+        app.io.sockets.in(sessionId).emit('deletedQuestion', question.id);
+        res.redirect('/' + sessionId);
       });
     });
   });
