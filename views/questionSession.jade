@@ -6,9 +6,9 @@ block head
 
 block content
   a.logout(href='/auth/logout') Logout
-  form.ajax-submit(action='/#{questionSession.id}', method='post')
+  form.ajax-submit.question-form(action='/#{questionSession.id}', method='post')
     label(for='question_id') Your Question
-    textarea#question_id(name='question', rows=5)
+    textarea#question_id(name='question', rows=1)
     input.ask(type='submit', value='Ask')
   ul.questions
     each question in questions
@@ -36,4 +36,6 @@ block content
       </form>
     </li>
 
+block scripts
+  script(src='/js/jquery.autosize.min.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
