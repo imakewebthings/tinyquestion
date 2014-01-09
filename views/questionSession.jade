@@ -17,7 +17,7 @@ block content
         target='_blank')
           img(src=question.userPhoto, alt=question.userDisplayName, title=question.userDisplayName)
         p= question.text
-        form.ajax-submit(action='/questions/#{question.id}', method='post')
+        form.ajax-submit.upvote-form(action='/questions/#{question.id}', method='post')
           button.upvote(type='submit', title='Upvote',
           data-votes=question.votes)
             = question.votes + ' votes'
@@ -31,7 +31,7 @@ block content
     <li class="clearfix">
       <a class="user-photo" target="_blank"><img /></a>
       <p></p>
-      <form method="post">
+      <form class="ajax-submit upvote-form" method="post">
         <button class="upvote" type="submit" title="Upvote" data-votes="0">0 votes</button>
       </form>
     </li>

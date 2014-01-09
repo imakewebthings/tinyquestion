@@ -1,6 +1,5 @@
 (function() {
-  var $document = $(document);
-  var questionTemplate, currentUserId;
+  var questionTemplate, currentUserId, $questions;
 
   var createQuestion = function(question) {
     var $question = $(questionTemplate);
@@ -17,10 +16,10 @@
     $question.find('form').attr('action', '/questions/' + question.id);
 
     if (currentUserId === question.userId) {
-      $question.append('<form action="/questions/' + question.id + '" method="post"> <input type="hidden" name="_method" value="delete"> <input class="delete-question" type="submit" value="&times;" title="Delete" ></form>');
+      $question.append('<form class="ajax-submit" action="/questions/' + question.id + '" method="post"> <input type="hidden" name="_method" value="delete"> <input class="delete-question" type="submit" value="&times;" title="Delete" ></form>');
     }
 
-    $('.questions').append($question);
+    $questions.append($question);
   };
 
   var deleteQuestion = function(questionId) {
@@ -36,7 +35,6 @@
 
     $upvote.text(voteCount + ' ' + voteWord);
     $upvote.attr('data-votes', voteCount);
-    console.log(voteCount);
 
     while(parseInt($pivot.find('.upvote').attr('data-votes'), 10) < voteCount) {
       $pivot = $pivot.prev();
@@ -45,7 +43,7 @@
       $pivot.after($question);
     }
     else if (!$pivot.length) {
-      $('.questions').prepend($question);
+      $questions.prepend($question);
     }
   };
 
@@ -63,20 +61,11 @@
   };
 
   $(function() {
-    if ($('.questions')) {
+    $questions = $('.questions');
+    if ($questions.length) {
       initSocket();
       questionTemplate = $('#template-question').html();
       currentUserId = $('meta[name="user-id"]').attr('content');
     }
-  });
-
-  $document.on('submit', '.ajax-submit', function(event) {
-    var $this = $(this);
-    $.ajax({
-      type: $this.attr('method'),
-      data: $this.serializeArray(),
-      url: $this.attr('action')
-    });
-    event.preventDefault();
   });
 })();

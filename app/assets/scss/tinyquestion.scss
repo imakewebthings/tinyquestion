@@ -137,6 +137,11 @@ textarea {
     display:inline-block;
     margin-right:3px;
   }
+
+  .disabled & {
+    color:red;
+    cursor:default;
+  }
 }
 
 .howto {
