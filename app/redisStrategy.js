@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var timeout = 172800; // 48 hours
 var redis;
 
 var composeKey = function(collection, id) {
@@ -11,10 +12,12 @@ module.exports = {
   },
 
   putHash: function(collection, id, hash, callback) {
-    redis.hmset(composeKey(collection, id), hash, function(err, result) {
+    var key = composeKey(collection, id);
+    redis.hmset(key, hash, function(err, result) {
       if (err) {
         throw err;
       }
+      redis.expire(key, timeout);
       callback(null, hash);
     });
   },
@@ -50,11 +53,17 @@ module.exports = {
   },
 
   createEmptyList: function(collection, id, callback) {
-    callback();
+    redis.del(composeKey(collection, id), function() {
+      callback();
+    });
   },
 
   listAppend: function(collection, id, item, callback) {
-    redis.rpush(composeKey(collection, id), item, callback);
+    var key = composeKey(collection, id);
+    redis.rpush(key, item, function(err, result) {
+      redis.expire(key, timeout);
+      callback(err, result);
+    });
   },
 
   readList: function(collection, id, callback) {
