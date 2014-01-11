@@ -15,6 +15,8 @@
 
   $(function() {
     $questionBox = $('#question_id');
-    $questionBox.autosize();
+    if ($questionBox.length) {
+      $questionBox.autosize();
+    }
   });
 })();
