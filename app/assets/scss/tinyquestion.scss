@@ -33,6 +33,11 @@ a {
   &:active, &:hover {
     outline:0;
   }
+
+  &:hover, :focus {
+    text-decoration:none;
+    color:$complementColor;
+  }
 }
 
 h1 {
@@ -165,7 +170,7 @@ ol, ul {
 .page-wrapper {
   width:100%;
   max-width:540px;
-  padding:.5em;
+  padding:.5em .5em 25px .5em;
   margin:0 auto;
   position:relative;
 }
@@ -322,4 +327,23 @@ ol, ul {
   font-size:.8em;
   padding-left:30px;
   line-height:1.25;
+}
+
+.footer {
+  font-size:.5em;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:.5em 1em;
+  line-height:1;
+  background:lighten($baseColor, 35);
+  text-align:right;
+
+  p {
+    margin:0 6px 0 0;
+    padding-right:6px;
+    display:inline-block;
+    border-right:1px solid #ccc;
+  }
 }
