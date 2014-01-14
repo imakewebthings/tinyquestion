@@ -20,6 +20,9 @@ module.exports = function(app, config) {
   app.set('view engine', 'jade');
   app.set('view options', { layout: false });
   app.use(express.static(path.resolve(__dirname, '..', 'public')));
+  app.use(express.favicon(
+    path.resolve(__dirname, '..', 'public', 'img', 'favicon.ico')
+  ));
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());

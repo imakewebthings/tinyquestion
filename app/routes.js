@@ -88,4 +88,8 @@ module.exports = function(app, config) {
       });
     });
   });
+
+  app.all('*', function(req, res) {
+    res.status(404).render('404');
+  });
 };
