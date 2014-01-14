@@ -3,6 +3,7 @@ var path = require('path');
 var redis = require('redis').createClient();
 var RedisStore = require('connect-redis')(express);
 var persistence = require('./persistence')('redis');
+require('http').globalAgent.maxSockets = 200;
 
 var setupSockets = function(app) {
   app.io.on('connection', function(socket) {
