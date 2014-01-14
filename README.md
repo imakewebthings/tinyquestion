@@ -1,6 +1,6 @@
 # Tiny Question
 
-[tinyquestion.com](http://tinyquestion.com)
+[tinyquestion.com](http://tinyquestion.com) [![Master Build Status](https://travis-ci.org/imakewebthings/jquery-confirms.png?branch=master)](https://travis-ci.org/imakewebthings/jquery-confirms)
 
 A small tool for better conference Q&A sessions. Presenters can create question sessions and share the link with their audience. Audience members ask questions and upvote questions they like.
 
