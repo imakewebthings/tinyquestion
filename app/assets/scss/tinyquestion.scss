@@ -34,7 +34,7 @@ a {
     outline:0;
   }
 
-  &:hover, :focus {
+  &:hover, &:focus {
     text-decoration:none;
     color:$complementColor;
   }
