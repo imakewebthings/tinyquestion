@@ -13,7 +13,6 @@ A small tool for better conference Q&A sessions. Presenters can create question 
    own.
 5. Start your server with `npm start`.
 
-
 ## Config Options
 
 - **PORT**: Port the server listens on. Should be 80 in production.
@@ -25,6 +24,10 @@ A small tool for better conference Q&A sessions. Presenters can create question 
 - **TWITTER_CALLBACK_URL**: URL that Twitter redirects back to after successful authentication. This needs to point to the absolute URL for the `/auth/twitter/callback/` path.
 
 These config options may be specified in the `config.json` file mentioned in the setup above, through environment variables, or through arguments passed node at startup.
+
+## Tests
+
+Tests can be run with the Testem test runner in TDD mode using `npm run tdd` or in TAP-output CI mode using `npm test`.
 
 ## License
 
