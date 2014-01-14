@@ -32,7 +32,8 @@
     "connect-redis": "~1.4.6",
     "jade": "~1.0.0",
     "lodash": "~2.4.1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "passport-twitter": "~1.0.2"
   },
   "devDependencies": {
     "testem": "~0.6.2",
