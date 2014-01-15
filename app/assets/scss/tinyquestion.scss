@@ -258,8 +258,10 @@ ol, ul {
     margin-right:3px;
   }
 
-  &:hover, &:focus {
-    color:$complementColor;
+  .no-touch & {
+    &:hover, &:focus {
+      color:$complementColor;
+    }
   }
 
   .disabled & {
