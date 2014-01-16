@@ -3,6 +3,7 @@ var path = require('path');
 var redis = require('redis').createClient();
 var RedisStore = require('connect-redis')(express);
 var persistence = require('./persistence')('redis');
+var maxSessionAge = 1000 * 60 * 60 * 24 * 100; // 100 days
 require('http').globalAgent.maxSockets = 200;
 
 var setupSockets = function(app) {
@@ -29,7 +30,8 @@ module.exports = function(app, config) {
   app.use(express.session({
     secret: config.get('COOKIE_SECRET'),
     key: config.get('COOKIE_KEY'),
-    store: new RedisStore({ client: redis })
+    store: new RedisStore({ client: redis }),
+    cookie: { maxAge: maxSessionAge }
   }));
   require('./auth')(app, config, redis);
   app.use(app.router);
